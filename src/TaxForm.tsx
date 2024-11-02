@@ -1,8 +1,9 @@
 // src/TaxForm.tsx
 import React, { useState } from 'react';
-import {useDispatch} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import styled from 'styled-components';
-import { getCalculateTaxAction } from "./redux/slice";
+import { getCalculateTaxAction } from './redux/slice';
+import {StateType} from './redux/index';
 
 const FormContainer = styled.div`
   max-width: 400px;
@@ -55,12 +56,19 @@ const ErrorMessage = styled.p`
   font-size: 12px;
 `;
 
+const TotalTax = styled.p`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
 export const TaxForm: React.FC = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const { data, isLoading, errors } = useSelector((state: StateType) => state.incomeTax);
   const [annualIncome, setAnnualIncome] = useState<number>(0);
   const [taxYear, setTaxYear] = useState<string>('');
   const [error, setError] = useState<string>('');
 
+  console.log('TaxForm UI', data, isLoading, errors);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
@@ -92,9 +100,8 @@ export const TaxForm: React.FC = () => {
         <InputGroup>
           <Label htmlFor="annualIncome">Annual Income:</Label>
           <Input
-            type="number"
+            type="text"
             id="annualIncome"
-            min="0"
             value={annualIncome}
             onChange={(e) => setAnnualIncome(Number(e.target.value))}
             required
@@ -116,6 +123,7 @@ export const TaxForm: React.FC = () => {
           </Select>
         </InputGroup>
         {error && <ErrorMessage>{error}</ErrorMessage>}
+        {data && <TotalTax>Your marginal tax is ${data}</TotalTax>}
         <SubmitButton type="submit">Submit</SubmitButton>
       </form>
     </FormContainer>

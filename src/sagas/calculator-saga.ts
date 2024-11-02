@@ -1,9 +1,29 @@
 import { PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { put, takeLatest, } from "redux-saga/effects";
+import { put, takeLatest, call } from "redux-saga/effects";
 import { TaxApiResponseType, GET_MARGINAL_TAX_BY_YEAR, CalucatedTaxPayload } from "../redux/types";
 import {  getCalculateTaxSuccessAction,getCalculateTaxErrorAction } from "../redux/slice";
 import axios from 'axios';
+
+function calculateTax(income: number, taxData: TaxApiResponseType): number {
+  let totalTax = 0;
+
+  for (const bracket of taxData.tax_brackets) {
+    // Determine the maximum income for this bracket (or use income if in the top bracket)
+    const upperLimit = bracket.max ? bracket.max : income;
+
+    // Check if income is within this bracket
+    if (income > bracket.min) {
+      // Calculate the taxable amount for this bracket
+      const taxableIncomeInBracket = Math.min(income, upperLimit) - bracket.min;
+
+      // Calculate the tax for this bracket and add to the total
+      totalTax += taxableIncomeInBracket * bracket.rate;
+    }
+  }
+
+  return parseFloat(totalTax.toFixed(2));
+}
 
 // Generator function
 export function* calculateSaga({ payload: {income, year} }: PayloadAction<CalucatedTaxPayload>) {
@@ -13,10 +33,10 @@ export function* calculateSaga({ payload: {income, year} }: PayloadAction<Caluca
     const {status, data} = response
     
     if(status === 200 && data) {
-      const {tax_brackets} = data
-      console.log('FETCHED DATA', income, tax_brackets)
+      const totalTax: number = yield call(calculateTax, income, data)
+      console.log('FETCHED DATA', income, totalTax)
 
-      yield put(getCalculateTaxSuccessAction(1));
+      yield put(getCalculateTaxSuccessAction(totalTax));
     }
     
   } catch (error) {

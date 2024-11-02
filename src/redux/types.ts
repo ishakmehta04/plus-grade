@@ -13,7 +13,7 @@ export interface CalculateStateType {
 }
 
 interface TaxBracket {
-  max: number;
+  max?: number;
   min: number;
   rate: number;
 }
