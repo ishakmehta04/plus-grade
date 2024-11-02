@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import styled from 'styled-components';
-import { getCalculateTaxAction } from './redux/slice';
-import {StateType} from './redux/index';
+import { getCalculateTaxAction } from '../redux/slice';
+import {StateType} from '../redux/index';
+import {TaxResult} from './TaxResult';
 
 const FormContainer = styled.div`
   max-width: 400px;
@@ -49,6 +50,11 @@ const SubmitButton = styled.button`
   &:hover {
     background-color: #0056b3;
   }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #aab3bd;
+  } 
 `;
 
 const ErrorMessage = styled.p`
@@ -56,29 +62,24 @@ const ErrorMessage = styled.p`
   font-size: 12px;
 `;
 
-const TotalTax = styled.p`
-  font-size: 16px;
-  font-weight: bold;
-`;
-
 export const TaxForm: React.FC = () => {
   const dispatch = useDispatch();
-  const { data, isLoading, errors } = useSelector((state: StateType) => state.incomeTax);
+  const { data, isLoading, errors: serverError } = useSelector((state: StateType) => state.incomeTax);
   const [annualIncome, setAnnualIncome] = useState<number>(0);
   const [taxYear, setTaxYear] = useState<string>('');
-  const [error, setError] = useState<string>('');
+  const [validationError, setValidationError] = useState<string>('');
 
-  console.log('TaxForm UI', data, isLoading, errors);
+  console.log('TaxForm UI', data, isLoading, serverError);
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     // Validation
     if (annualIncome <= 0) {
-      setError('Annual income must be a positive number.');
+      setValidationError('Annual income must be a positive number.');
       return;
     }
     if (!taxYear) {
-      setError('Please select a tax year.');
+      setValidationError('Please select a tax year.');
       return;
     }
 
@@ -86,7 +87,7 @@ export const TaxForm: React.FC = () => {
     dispatch(getCalculateTaxAction({income :annualIncome, year: taxYear}))
     
     // Reset error if validation passes
-    setError('');
+    setValidationError('');
 
     console.log('Annual Income:', annualIncome);
     console.log('Tax Year:', taxYear);
@@ -122,9 +123,10 @@ export const TaxForm: React.FC = () => {
             <option value="2022">2022</option>
           </Select>
         </InputGroup>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
-        {data && <TotalTax>Your marginal tax is ${data}</TotalTax>}
-        <SubmitButton type="submit">Submit</SubmitButton>
+        {validationError && <ErrorMessage>{validationError}</ErrorMessage>}
+        {!isLoading && !serverError && data && <TaxResult income={annualIncome} tax={data} />}
+        {serverError && <ErrorMessage>{serverError}</ErrorMessage>}
+        <SubmitButton type="submit" disabled={isLoading}>Submit</SubmitButton>
       </form>
     </FormContainer>
   );

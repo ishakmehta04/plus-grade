@@ -34,18 +34,22 @@ export function* calculateSaga({ payload: {income, year} }: PayloadAction<Caluca
     
     if(status === 200 && data) {
       const totalTax: number = yield call(calculateTax, income, data)
-      console.log('FETCHED DATA', income, totalTax)
+      console.log('FETCHED DATA', income, totalTax, response)
 
       yield put(getCalculateTaxSuccessAction(totalTax));
     }
     
   } catch (error) {
     const err = error as Error;
-    yield put(getCalculateTaxErrorAction(err.message));
+    const {message} = err;
+    /**
+     * Call any error monitoring tool like Datadog and pass the actual error(message from above line)
+     */
+    yield put(getCalculateTaxErrorAction("Something went wrong, please try again."));
   }
 }
 
 // Generator function
-export function* watchcalculateIncomeTax() {
+export function* watchCalculateIncomeTax() {
   yield takeLatest(GET_MARGINAL_TAX_BY_YEAR, calculateSaga);
 }

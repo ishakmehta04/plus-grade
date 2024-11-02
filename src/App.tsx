@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {TaxForm} from './TaxForm';
+import {TaxForm} from './components/TaxForm';
 
 const App: React.FC = () => {
   return (
