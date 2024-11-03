@@ -22,7 +22,8 @@ function calculateTax(income: number, taxData: TaxApiResponseType): number {
 		// Check if income is within this bracket
 		if (income > bracket.min) {
 			// Calculate the taxable amount for this bracket
-			const taxableIncomeInBracket = Math.min(income, upperLimit) - bracket.min;
+			const taxableIncomeInBracket =
+				Math.min(income, upperLimit) - bracket.min;
 
 			// Calculate the tax for this bracket and add to the total
 			totalTax += taxableIncomeInBracket * bracket.rate;
@@ -52,11 +53,14 @@ export function* calculateSaga({
 	} catch (error) {
 		const err = error as Error;
 		const { message } = err;
+		console.error(message);
 		/**
-     * Call any error monitoring tool like Datadog and pass the actual error(message from above line)
-     */
+		 * Call any error monitoring tool like Datadog and pass the actual error(message from above line)
+		 */
 		yield put(
-			getCalculateTaxErrorAction('Something went wrong, please try again.'),
+			getCalculateTaxErrorAction(
+				'Something went wrong, please try again.',
+			),
 		);
 	}
 }

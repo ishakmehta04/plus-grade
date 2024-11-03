@@ -1,24 +1,24 @@
 export type CalucatedTaxPayload = {
-  income: number;
-  year: string;
+	income: number;
+	year: string;
 };
 
 export type TaxValue = number;
 
 export interface CalculateStateType {
-  data: number | null;
-  isLoading: boolean;
-  errors: string;
+	data: number | null;
+	isLoading: boolean;
+	errors: string;
 }
 
 interface TaxBracket {
-  max?: number;
-  min: number;
-  rate: number;
+	max?: number;
+	min: number;
+	rate: number;
 }
 
 export interface TaxApiResponseType {
-  tax_brackets: TaxBracket[];
+	tax_brackets: TaxBracket[];
 }
 
 export const TAX_SLICE = 'taxSlice';

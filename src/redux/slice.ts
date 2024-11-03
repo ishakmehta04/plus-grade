@@ -12,11 +12,12 @@ export const calculteTaxSlice = createSlice({
 	initialState: incomeTaxInitialState,
 	reducers: {
 		/* This action will trigger our saga middleware
-       and set the loader to true and reset error message.
-    */
+			 and set the loader to true and reset error message.
+		*/
 		getCalculateTaxAction: (
 			state: CalculateStateType,
-			{ payload: { income, year } }: PayloadAction<CalucatedTaxPayload>,
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			{ payload }: PayloadAction<CalucatedTaxPayload>,
 		) => {
 			state.isLoading = true;
 			state.errors = '';

@@ -8,31 +8,31 @@ import { TaxResult } from './TaxResult';
 import { Spinner } from './Spinner';
 
 const FormContainer = styled.div`
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+	max-width: 500px;
+	margin: 20px auto;
+	padding: 20px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
 `;
 
 const FormTitle = styled.h2`
-  text-align: center;
+	text-align: center;
 `;
 
 const Form = styled.form`
-		display: flex;
-    justify-content: space-between;
-    position: relative;
-		    align-items: flex-end;
+	display: flex;
+	justify-content: space-between;
+	position: relative;
+	align-items: flex-end;
 `;
 
 const InputGroup = styled.div`
-  text-align: left;
+	text-align: left;
 `;
 
 const Label = styled.label`
-  display: block;
-  margin-bottom: 5px;
+	display: block;
+	margin-bottom: 5px;
 `;
 
 const commonStyles = css`
@@ -43,21 +43,20 @@ const commonStyles = css`
 	background-color: #f6f6f9;
 	border: #f6f6f9;
 	width: 100%;
-  padding: 0 15px;
-
+	padding: 0 15px;
 `;
 
 const Input = styled.input`
-  ${commonStyles};
+	${commonStyles};
 `;
 
 const Select = styled.select`
-  ${commonStyles};
+	${commonStyles};
 	border-right: 16px solid transparent;
 `;
 
 const CalculateButton = styled.button`
-  background-color: #e34b31;
+	background-color: #e34b31;
 	color: white;
 	border: none;
 	cursor: pointer;
@@ -70,19 +69,19 @@ const CalculateButton = styled.button`
 	user-select: none;
 	margin: 0;
 
-  &:hover {
-    background-color: #e42504;
-  }
+	&:hover {
+		background-color: #e42504;
+	}
 
-  &:disabled {
-    cursor: not-allowed;
-    background-color: #aab3bd;
-  }
+	&:disabled {
+		cursor: not-allowed;
+		background-color: #aab3bd;
+	}
 `;
 
 const ErrorMessage = styled.p`
-  color: red;
-  font-size: 16px;
+	color: red;
+	font-size: 16px;
 `;
 
 export const TaxForm: React.FC = () => {
@@ -105,7 +104,6 @@ export const TaxForm: React.FC = () => {
 	}, [annualIncome]);
 
 	const isValid = useCallback(() => {
-
 		const regex = /^\d*\.?\d*$/;
 
 		// Validation
@@ -119,12 +117,12 @@ export const TaxForm: React.FC = () => {
 		}
 
 		return true;
-	}, [annualIncome, taxYear])
+	}, [annualIncome, taxYear]);
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		if(!isValid()) return;
+		if (!isValid()) return;
 
 		dispatch(
 			getCalculateTaxAction({
@@ -169,17 +167,23 @@ export const TaxForm: React.FC = () => {
 							<option value="2022">2022</option>
 						</Select>
 					</InputGroup>
-					<CalculateButton id="calculateButton" type="submit" disabled={isLoading}>
-            Calculate
+					<CalculateButton
+						id="calculateButton"
+						type="submit"
+						disabled={isLoading}
+					>
+						Calculate
 					</CalculateButton>
 				</Form>
-				{validationError && <ErrorMessage>{validationError}</ErrorMessage>}
+				{validationError && (
+					<ErrorMessage>{validationError}</ErrorMessage>
+				)}
 				{serverError && <ErrorMessage>{serverError}</ErrorMessage>}
 			</FormContainer>
 			{isLoading && <Spinner />}
-			{!isLoading && !serverError && resultVisibility && data !== null && (
+			{!isLoading && !serverError && resultVisibility && data !== null ? (
 				<TaxResult income={parseFloat(annualIncome)} tax={data} />
-			)}
+			) : null}
 		</>
 	);
 };

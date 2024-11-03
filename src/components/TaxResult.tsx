@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { PieChart } from 'react-minimal-pie-chart';
 
 const TotalTax = styled.div`
-  font-size: 16px;
-  font-weight: bold;
-  display: flex;
-  gap: 50px;
-  justify-content: center;
-  align-items: center;
-  padding: 25px 0;
+	font-size: 16px;
+	font-weight: bold;
+	display: flex;
+	gap: 50px;
+	justify-content: center;
+	align-items: center;
+	padding: 25px 0;
 `;
 
 export const TaxResult: React.FC<{ income: number; tax: number }> = ({
