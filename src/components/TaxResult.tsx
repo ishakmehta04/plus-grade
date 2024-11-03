@@ -25,7 +25,7 @@ export const TaxResult: React.FC<{ income: number; tax: number }> = ({
 		<TotalTax>
 			<div>
 				<p>Income: ${income}</p>
-				<p>Marginal tax: ${tax}</p>
+				<p id="marginalTax">Marginal tax: ${tax}</p>
 				<p>Net Pay: ${netIncome.toFixed(2)}</p>
 			</div>
 

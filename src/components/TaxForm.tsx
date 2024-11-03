@@ -174,7 +174,7 @@ export const TaxForm: React.FC = () => {
 					{validationError && <ErrorMessage>{validationError}</ErrorMessage>}
 
 					{serverError && <ErrorMessage>{serverError}</ErrorMessage>}
-					<CalculateButton type="submit" disabled={isLoading}>
+					<CalculateButton id="calculateButton" type="submit" disabled={isLoading}>
             Calculate
 					</CalculateButton>
 				</Form>
