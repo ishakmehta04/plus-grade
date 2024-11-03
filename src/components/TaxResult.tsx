@@ -31,6 +31,7 @@ export const TaxResult: React.FC<{ income: number; tax: number }> = ({
 
 			{!!income && (
 				<PieChart
+					data-testid="pie-chart"
 					data={pieIncomeData}
 					style={{ width: '300px', height: '150px' }}
 					label={({ dataEntry }) =>

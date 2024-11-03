@@ -7,7 +7,6 @@ const spin = keyframes`
   }
 `;
 
-// Create a styled div with the spin animation applied
 const SpinnerContainer = styled.div`
   border: 4px solid rgba(0, 0, 0, 0.1);
   width: 40px;
@@ -19,5 +18,5 @@ const SpinnerContainer = styled.div`
 `;
 
 export const Spinner: React.FC = () => {
-  return <SpinnerContainer />;
+  return <SpinnerContainer role="status" />;
 };
