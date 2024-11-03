@@ -1,8 +1,7 @@
-
 export type CalucatedTaxPayload = {
-  income: number, 
-  year : string
-}
+  income: number;
+  year: string;
+};
 
 export type TaxValue = number;
 
@@ -19,10 +18,10 @@ interface TaxBracket {
 }
 
 export interface TaxApiResponseType {
-  tax_brackets : TaxBracket[];
+  tax_brackets: TaxBracket[];
 }
 
-export const TAX_SLICE = "taxSlice";
+export const TAX_SLICE = 'taxSlice';
 export type TAX_SLICE = typeof TAX_SLICE;
 
 export const GET_MARGINAL_TAX_BY_YEAR = `${TAX_SLICE}/getCalculateTaxAction`;

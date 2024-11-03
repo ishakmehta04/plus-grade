@@ -12,32 +12,37 @@ const TotalTax = styled.div`
   padding: 25px 0;
 `;
 
-export const TaxResult: React.FC<{ income: number, tax: number }> = ({ income, tax }) => {
-  const netIncome = income - tax;
-  const pieIncomeData = [
-    { title: 'Net Pay', value: netIncome, color: '#691f74' },
-    { title: 'Marginal Tax', value: tax, color: '#D6432A' },
-  ]
-  return (
-    <TotalTax>
-      <div>
-        <p>Income: ${income}</p>
-        <p>Marginal tax: ${tax}</p>
-        <p>Net Pay: ${netIncome.toFixed(2)}</p>
-      </div>
+export const TaxResult: React.FC<{ income: number; tax: number }> = ({
+	income,
+	tax,
+}) => {
+	const netIncome = income - tax;
+	const pieIncomeData = [
+		{ title: 'Net Pay', value: netIncome, color: '#691f74' },
+		{ title: 'Marginal Tax', value: tax, color: '#D6432A' },
+	];
+	return (
+		<TotalTax>
+			<div>
+				<p>Income: ${income}</p>
+				<p>Marginal tax: ${tax}</p>
+				<p>Net Pay: ${netIncome.toFixed(2)}</p>
+			</div>
 
-      {
-        !!income && <PieChart
-          data={pieIncomeData}
-          style={{ width: '300px', height: '150px' }}
-          label={({ dataEntry }) => `${dataEntry.title}: ${Math.round(dataEntry.percentage)}%`}
-          labelPosition={112}
-          labelStyle={{
-            fontSize: '5px',
-            fill: '#000',
-          }}
-        />
-      }
-    </TotalTax>
-  )
-}
+			{!!income && (
+				<PieChart
+					data={pieIncomeData}
+					style={{ width: '300px', height: '150px' }}
+					label={({ dataEntry }) =>
+						`${dataEntry.title}: ${Math.round(dataEntry.percentage)}%`
+					}
+					labelPosition={112}
+					labelStyle={{
+						fontSize: '5px',
+						fill: '#000',
+					}}
+				/>
+			)}
+		</TotalTax>
+	);
+};
