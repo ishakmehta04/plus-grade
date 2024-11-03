@@ -1,5 +1,5 @@
 // src/TaxForm.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import styled from 'styled-components';
 import { getCalculateTaxAction } from '../redux/slice';
@@ -7,8 +7,8 @@ import {StateType} from '../redux/index';
 import {TaxResult} from './TaxResult';
 
 const FormContainer = styled.div`
-  max-width: 600px;
-  margin: auto;
+  max-width: 400px;
+  margin: 20px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -65,16 +65,20 @@ const ErrorMessage = styled.p`
 export const TaxForm: React.FC = () => {
   const dispatch = useDispatch();
   const { data, isLoading, errors: serverError } = useSelector((state: StateType) => state.incomeTax);
-  const [annualIncome, setAnnualIncome] = useState<number>(0);
+  const [annualIncome, setAnnualIncome] = useState<string>('');
   const [taxYear, setTaxYear] = useState<string>('');
   const [validationError, setValidationError] = useState<string>('');
 
   console.log('TaxForm UI', data, isLoading, serverError);
+
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    const regex = /^(0|[1-9][0-9]*)(\.[0-9]+)?$/;
     
     // Validation
-    if (annualIncome <= 0) {
+    if (!regex.test(annualIncome)) {
       setValidationError('Annual income must be a positive number.');
       return;
     }
@@ -84,7 +88,7 @@ export const TaxForm: React.FC = () => {
     }
 
 
-    dispatch(getCalculateTaxAction({income :annualIncome, year: taxYear}))
+    dispatch(getCalculateTaxAction({income: parseFloat(annualIncome), year: taxYear}))
     
     // Reset error if validation passes
     setValidationError('');
@@ -95,6 +99,7 @@ export const TaxForm: React.FC = () => {
   };
 
   return (
+    <>
     <FormContainer>
       <FormTitle>Tax Information</FormTitle>
       <form onSubmit={handleSubmit}>
@@ -104,7 +109,7 @@ export const TaxForm: React.FC = () => {
             type="text"
             id="annualIncome"
             value={annualIncome}
-            onChange={(e) => setAnnualIncome(Number(e.target.value))}
+            onChange={(e) => setAnnualIncome(e.target.value)}
             required
           />
         </InputGroup>
@@ -124,10 +129,12 @@ export const TaxForm: React.FC = () => {
           </Select>
         </InputGroup>
         {validationError && <ErrorMessage>{validationError}</ErrorMessage>}
-        {!isLoading && !serverError && data && <TaxResult income={annualIncome} tax={data} />}
+        
         {serverError && <ErrorMessage>{serverError}</ErrorMessage>}
         <SubmitButton type="submit" disabled={isLoading}>Submit</SubmitButton>
       </form>
     </FormContainer>
+    {!isLoading && !serverError && data && <TaxResult income={parseFloat(annualIncome)} tax={data} />}
+    </>
   );
 };

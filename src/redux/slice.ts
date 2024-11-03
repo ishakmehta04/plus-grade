@@ -25,7 +25,7 @@ export const calculteTaxSlice = createSlice({
     getCalculateTaxErrorAction: (state: CalculateStateType, { payload: error }: PayloadAction<string>) => {
       state.isLoading = false;
       state.errors = error;
-      state.data = 0;
+      state.data = null;
     },
   }
 })
