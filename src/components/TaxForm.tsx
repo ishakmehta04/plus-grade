@@ -7,7 +7,7 @@ import {StateType} from '../redux/index';
 import {TaxResult} from './TaxResult';
 
 const FormContainer = styled.div`
-  max-width: 400px;
+  max-width: 600px;
   margin: auto;
   padding: 20px;
   border: 1px solid #ccc;
