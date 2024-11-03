@@ -81,7 +81,7 @@ const CalculateButton = styled.button`
 
 const ErrorMessage = styled.p`
   color: red;
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 export const TaxForm: React.FC = () => {
@@ -171,13 +171,12 @@ export const TaxForm: React.FC = () => {
 							<option value="2022">2022</option>
 						</Select>
 					</InputGroup>
-					{validationError && <ErrorMessage>{validationError}</ErrorMessage>}
-
-					{serverError && <ErrorMessage>{serverError}</ErrorMessage>}
 					<CalculateButton id="calculateButton" type="submit" disabled={isLoading}>
             Calculate
 					</CalculateButton>
 				</Form>
+				{validationError && <ErrorMessage>{validationError}</ErrorMessage>}
+				{serverError && <ErrorMessage>{serverError}</ErrorMessage>}
 			</FormContainer>
 			{!isLoading && !serverError && result && (
 				<TaxResult income={parseFloat(annualIncome)} tax={result} />
