@@ -1,10 +1,11 @@
 // src/TaxForm.tsx
-import React, { useState, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useLayoutEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import { getCalculateTaxAction } from '../redux/slice';
 import { StateType } from '../redux/index';
 import { TaxResult } from './TaxResult';
+import { Spinner } from './Spinner';
 
 const FormContainer = styled.div`
   max-width: 500px;
@@ -94,37 +95,36 @@ export const TaxForm: React.FC = () => {
 	const [annualIncome, setAnnualIncome] = useState<string>('');
 	const [taxYear, setTaxYear] = useState<string>('');
 	const [validationError, setValidationError] = useState<string>('');
-	const [result, setResult] = useState<number | null>(null);
+	const [resultVisibility, setResultVisibility] = useState<boolean>(false);
 
-	console.log('TaxForm UI', data, isLoading, serverError);
+	// console.log('TaxForm UI', data, isLoading, serverError);
 
 	// Effect to reset result whenever inputValue changes
 	useLayoutEffect(() => {
-		setResult(null);
+		setResultVisibility(false);
 	}, [annualIncome]);
 
-	// set calculated result from store to display in UI
-	useEffect(() => {
-		if(data) {
-			setResult(data);
-		}
-	}, [data]);
+	const isValid = useCallback(() => {
 
-
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-
-		const regex = /^(0|[1-9][0-9]*)(\.[0-9]+)?$/;
+		const regex = /^\d*\.?\d*$/;
 
 		// Validation
 		if (!regex.test(annualIncome)) {
 			setValidationError('Annual income must be a positive number.');
-			return;
+			return false;
 		}
 		if (!taxYear) {
 			setValidationError('Please select a tax year.');
-			return;
+			return false;
 		}
+
+		return true;
+	}, [annualIncome, taxYear])
+
+	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+
+		if(!isValid()) return;
 
 		dispatch(
 			getCalculateTaxAction({
@@ -133,12 +133,10 @@ export const TaxForm: React.FC = () => {
 			}),
 		);
 
+		setResultVisibility(true);
+
 		// Reset error if validation passes
 		setValidationError('');
-
-		console.log('Annual Income:', annualIncome);
-		console.log('Tax Year:', taxYear);
-		// Logic to handle form submission can be added here
 	};
 
 	return (
@@ -178,8 +176,9 @@ export const TaxForm: React.FC = () => {
 				{validationError && <ErrorMessage>{validationError}</ErrorMessage>}
 				{serverError && <ErrorMessage>{serverError}</ErrorMessage>}
 			</FormContainer>
-			{!isLoading && !serverError && result && (
-				<TaxResult income={parseFloat(annualIncome)} tax={result} />
+			{isLoading && <Spinner />}
+			{!isLoading && !serverError && resultVisibility && data !== null && (
+				<TaxResult income={parseFloat(annualIncome)} tax={data} />
 			)}
 		</>
 	);
