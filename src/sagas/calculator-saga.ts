@@ -29,7 +29,7 @@ function calculateTax(income: number, taxData: TaxApiResponseType): number {
 export function* calculateSaga({ payload: {income, year} }: PayloadAction<CalucatedTaxPayload>) {
   try {
     // You can also export the axios call as a function.
-    const response: AxiosResponse<TaxApiResponseType> = yield axios.get(`http://localhost:5001/tax-calculator/tax-year/${year}`);
+    const response: AxiosResponse<TaxApiResponseType> = yield axios.get(`${process.env.REACT_APP_API_URL}/tax-calculator/tax-year/${year}`);
     const {status, data} = response
     
     if(status === 200 && data) {

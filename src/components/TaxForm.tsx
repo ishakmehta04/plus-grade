@@ -20,6 +20,7 @@ const FormTitle = styled.h2`
 
 const InputGroup = styled.div`
   margin-bottom: 15px;
+  text-align: left;
 `;
 
 const Label = styled.label`
