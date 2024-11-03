@@ -1,13 +1,13 @@
 // src/TaxForm.tsx
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { getCalculateTaxAction } from '../redux/slice';
 import { StateType } from '../redux/index';
 import { TaxResult } from './TaxResult';
 
 const FormContainer = styled.div`
-  max-width: 400px;
+  max-width: 500px;
   margin: 20px auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -18,8 +18,14 @@ const FormTitle = styled.h2`
   text-align: center;
 `;
 
+const Form = styled.form`
+		display: flex;
+    justify-content: space-between;
+    position: relative;
+		    align-items: flex-end;
+`;
+
 const InputGroup = styled.div`
-  margin-bottom: 15px;
   text-align: left;
 `;
 
@@ -28,28 +34,43 @@ const Label = styled.label`
   margin-bottom: 5px;
 `;
 
+const commonStyles = css`
+	box-sizing: border-box;
+	border-radius: 74px;
+	height: 48px;
+	margin-right: 15px;
+	background-color: #f6f6f9;
+	border: #f6f6f9;
+	width: 100%;
+  padding: 0 15px;
+
+`;
+
 const Input = styled.input`
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
+  ${commonStyles};
 `;
 
 const Select = styled.select`
-  width: 100%;
-  padding: 8px;
-  box-sizing: border-box;
+  ${commonStyles};
+	border-right: 16px solid transparent;
 `;
 
-const SubmitButton = styled.button`
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+const CalculateButton = styled.button`
+  background-color: #e34b31;
+	color: white;
+	border: none;
+	cursor: pointer;
+	outline: none;
+	border-radius: 50px;
+	font-size: 14px;
+	height: 48px;
+	padding: 0px 18px;
+	text-align: center;
+	user-select: none;
+	margin: 0;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #e42504;
   }
 
   &:disabled {
@@ -124,7 +145,7 @@ export const TaxForm: React.FC = () => {
 		<>
 			<FormContainer>
 				<FormTitle>Tax Information</FormTitle>
-				<form onSubmit={handleSubmit}>
+				<Form onSubmit={handleSubmit}>
 					<InputGroup>
 						<Label htmlFor="annualIncome">Annual Income:</Label>
 						<Input
@@ -153,10 +174,10 @@ export const TaxForm: React.FC = () => {
 					{validationError && <ErrorMessage>{validationError}</ErrorMessage>}
 
 					{serverError && <ErrorMessage>{serverError}</ErrorMessage>}
-					<SubmitButton type="submit" disabled={isLoading}>
-            Submit
-					</SubmitButton>
-				</form>
+					<CalculateButton type="submit" disabled={isLoading}>
+            Calculate
+					</CalculateButton>
+				</Form>
 			</FormContainer>
 			{!isLoading && !serverError && result && (
 				<TaxResult income={parseFloat(annualIncome)} tax={result} />
