@@ -73,21 +73,21 @@ export const TaxForm: React.FC = () => {
 	const [annualIncome, setAnnualIncome] = useState<string>('');
 	const [taxYear, setTaxYear] = useState<string>('');
 	const [validationError, setValidationError] = useState<string>('');
-  const [result, setResult] = useState<number | null>(null);
+	const [result, setResult] = useState<number | null>(null);
 
 	console.log('TaxForm UI', data, isLoading, serverError);
 
-  // Effect to reset result whenever inputValue changes
-  useLayoutEffect(() => {
-    setResult(null);
-  }, [annualIncome]);
+	// Effect to reset result whenever inputValue changes
+	useLayoutEffect(() => {
+		setResult(null);
+	}, [annualIncome]);
 
-// set calculated result from store to display in UI
-  useEffect(() => {
-    if(data) {
-      setResult(data);
-    }
-  }, [data]);
+	// set calculated result from store to display in UI
+	useEffect(() => {
+		if(data) {
+			setResult(data);
+		}
+	}, [data]);
 
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

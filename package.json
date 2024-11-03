@@ -32,12 +32,6 @@
     "eject": "react-scripts eject",
     "lint": "yarn run eslint --fix"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
