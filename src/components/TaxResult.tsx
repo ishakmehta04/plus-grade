@@ -10,6 +10,10 @@ const TotalTax = styled.div`
 	justify-content: center;
 	align-items: center;
 	padding: 25px 0;
+
+	@media (max-width: 600px) {
+		flex-direction: column;
+  	}
 `;
 
 export const TaxResult: React.FC<{ income: number; tax: number }> = ({
@@ -33,13 +37,13 @@ export const TaxResult: React.FC<{ income: number; tax: number }> = ({
 				<PieChart
 					data-testid="pie-chart"
 					data={pieIncomeData}
-					style={{ width: '300px', height: '150px' }}
+					style={{ width: '325px', height: '150px' }}
 					label={({ dataEntry }) =>
 						`${dataEntry.title}: ${Math.round(dataEntry.percentage)}%`
 					}
 					labelPosition={112}
 					labelStyle={{
-						fontSize: '5px',
+						fontSize: '7px',
 						fill: '#000',
 					}}
 				/>

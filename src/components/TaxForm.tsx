@@ -13,6 +13,10 @@ const FormContainer = styled.div`
 	padding: 20px;
 	border: 1px solid #ccc;
 	border-radius: 5px;
+
+	@media (max-width: 600px) {
+		margin: 20px 10px;
+  	}
 `;
 
 const FormTitle = styled.h2`
@@ -24,10 +28,19 @@ const Form = styled.form`
 	justify-content: space-between;
 	position: relative;
 	align-items: flex-end;
+
+	@media (max-width: 600px) {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 20px;
+  	}
 `;
 
 const InputGroup = styled.div`
 	text-align: left;
+	@media (max-width: 600px) {
+		width: 100%;
+  	}
 `;
 
 const Label = styled.label`
@@ -77,6 +90,11 @@ const CalculateButton = styled.button`
 		cursor: not-allowed;
 		background-color: #aab3bd;
 	}
+
+	@media (max-width: 600px) {
+		margin: auto;
+		width: 65%;
+  	}
 `;
 
 const ErrorMessage = styled.p`
